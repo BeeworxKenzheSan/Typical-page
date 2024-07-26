@@ -10,6 +10,7 @@ function App() {
   const loginHandler = (email, password) => {
     setUserName({ email: email, password: password });
     setIsLoggedIn(true);
+    localStorage.setItem("isLogged", email);
   };
 
   const logoutHandler = () => {
