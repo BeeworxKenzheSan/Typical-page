@@ -1,11 +1,13 @@
 import styled from "styled-components";
 import Navigation from "./Navigation";
 
-const MainHeader = () => {
+// eslint-disable-next-line react/prop-types
+const MainHeader = ({ isLoggedIn, onLogout }) => {
+  // props drilling
   return (
     <Header>
       <h1>A Typical Page</h1>
-      <Navigation />
+      <Navigation isLoggedIn={isLoggedIn} onLogout={onLogout} />
     </Header>
   );
 };

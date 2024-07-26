@@ -46,19 +46,24 @@ const Nav = styled.nav`
   }
 `;
 
-const Navigation = () => {
+// eslint-disable-next-line react/prop-types
+const Navigation = ({ isLoggedIn, onLogout }) => {
   return (
     <Nav>
       <ul>
-        <li>
-          <a href="/">Users</a>
-        </li>
-        <li>
-          <a href="/">Admin</a>
-        </li>
-        <li>
-          <button>Logout</button>
-        </li>
+        {isLoggedIn && (
+          <>
+            <li>
+              <a href="/">Users</a>
+            </li>
+            <li>
+              <a href="/">Admin</a>
+            </li>
+            <li>
+              <button onClick={onLogout}>Logout</button>
+            </li>
+          </>
+        )}
       </ul>
     </Nav>
   );
