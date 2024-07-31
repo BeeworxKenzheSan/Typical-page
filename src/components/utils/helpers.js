@@ -1,7 +1,7 @@
 import { ACTION_TYPES } from "./constanst";
 
 export const passwordReducer = (state, action) => {
-  if (action.type === ACTION_TYPES.PASSWORD_IS_VALID) {
+  if (action.type === ACTION_TYPES.PASSWORD_VALUE_HANDLE) {
     return {
       ...state,
       password: action.payload,

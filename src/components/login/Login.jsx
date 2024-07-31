@@ -1,4 +1,4 @@
-import { useState, useReducer } from "react";
+import { useReducer } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import Card from "../UI/Card";
@@ -18,16 +18,12 @@ const Login = ({ onLogin }) => {
     passwordIsValid: true,
   });
 
-  const [formIsValid, setFormIsValid] = useState(false);
-
   const emailChangeHandler = (event) => {
-    const signal = { type: ACTION_TYPES.BI_BIB, payload: event.target.value };
+    const signal = {
+      type: ACTION_TYPES.EMAIL_VALUE_HANDLE,
+      payload: event.target.value,
+    };
     dispatchEmail(signal);
-
-    setFormIsValid(
-      event.target.value.includes("@") &&
-        passwordData.password.trim().length > 6
-    );
   };
 
   const passwordChangeHandler = (event) => {
@@ -35,9 +31,6 @@ const Login = ({ onLogin }) => {
       type: ACTION_TYPES.PASSWORD_VALUE_HANDLE,
       payload: event.target.value,
     });
-    setFormIsValid(
-      event.target.value.trim().length > 6 && emailData.email.includes("@")
-    );
   };
 
   const validateEmailHandler = () => {
@@ -53,6 +46,16 @@ const Login = ({ onLogin }) => {
     event.preventDefault();
     onLogin(emailData.email, passwordData.password);
   };
+
+  function isFormValid() {
+    if (
+      passwordData.password.trim().length > 6 &&
+      emailData.email.includes("@")
+    ) {
+      return true;
+    }
+    return false;
+  }
 
   return (
     <StyledLoginWrapper>
@@ -82,7 +85,7 @@ const Login = ({ onLogin }) => {
           />
         </ControlWrapper>
         <StyledActions>
-          <Button type="submit" disabled={!formIsValid}>
+          <Button type="submit" disabled={!isFormValid()}>
             Login
           </Button>
         </StyledActions>
