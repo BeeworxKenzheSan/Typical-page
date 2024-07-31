@@ -1,4 +1,6 @@
+import { useContext } from "react";
 import styled from "styled-components";
+import { AuthContext } from "../../store/AuthContext";
 
 const Nav = styled.nav`
   ul {
@@ -47,7 +49,8 @@ const Nav = styled.nav`
 `;
 
 // eslint-disable-next-line react/prop-types
-const Navigation = ({ isLoggedIn, onLogout }) => {
+const Navigation = () => {
+  const { isLoggedIn, onLogout } = useContext(AuthContext);
   return (
     <Nav>
       <ul>
