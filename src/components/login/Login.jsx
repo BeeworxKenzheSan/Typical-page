@@ -1,64 +1,82 @@
-import { useState } from "react";
+import { useState, useReducer } from "react";
 import styled from "styled-components";
 import PropTypes from "prop-types";
 import Card from "../UI/Card";
 import Button from "../UI/Button";
+import { ACTION_TYPES } from "../utils/constanst";
+import { emailReducer, passwordReducer } from "../utils/helpers";
+
+const initialState = {
+  email: "",
+  emailIsValid: true,
+};
 
 const Login = ({ onLogin }) => {
-  const [enteredEmail, setEnteredEmail] = useState("");
-  const [emailIsValid, setEmailIsValid] = useState();
-  const [enteredPassword, setEnteredPassword] = useState("");
-  const [passwordIsValid, setPasswordIsValid] = useState();
+  const [emailData, dispatchEmail] = useReducer(emailReducer, initialState);
+  const [passwordData, dispatchPassword] = useReducer(passwordReducer, {
+    password: "",
+    passwordIsValid: true,
+  });
+
   const [formIsValid, setFormIsValid] = useState(false);
 
   const emailChangeHandler = (event) => {
-    setEnteredEmail(event.target.value);
+    const signal = { type: ACTION_TYPES.BI_BIB, payload: event.target.value };
+    dispatchEmail(signal);
 
     setFormIsValid(
-      event.target.value.includes("@") && enteredPassword.trim().length > 6
+      event.target.value.includes("@") &&
+        passwordData.password.trim().length > 6
     );
   };
 
   const passwordChangeHandler = (event) => {
-    setEnteredPassword(event.target.value);
-
+    dispatchPassword({
+      type: ACTION_TYPES.PASSWORD_VALUE_HANDLE,
+      payload: event.target.value,
+    });
     setFormIsValid(
-      event.target.value.trim().length > 6 && enteredEmail.includes("@")
+      event.target.value.trim().length > 6 && emailData.email.includes("@")
     );
   };
 
   const validateEmailHandler = () => {
-    setEmailIsValid(enteredEmail.includes("@"));
+    const signal = { type: ACTION_TYPES.EMAIL_IS_VALID };
+    dispatchEmail(signal);
   };
 
   const validatePasswordHandler = () => {
-    setPasswordIsValid(enteredPassword.trim().length > 6);
+    dispatchPassword({ type: ACTION_TYPES.PASSWORD_IS_VALID });
   };
 
   const submitHandler = (event) => {
     event.preventDefault();
-    onLogin(enteredEmail, enteredPassword);
+    onLogin(emailData.email, passwordData.password);
   };
 
   return (
     <StyledLoginWrapper>
       <form onSubmit={submitHandler}>
-        <ControlWrapper className={emailIsValid === false ? "invalid" : ""}>
+        <ControlWrapper
+          className={emailData.emailIsValid === false ? "invalid" : ""}
+        >
           <StyledLable htmlFor="email">E-Mail</StyledLable>
           <StyledInput
             type="email"
             id="email"
-            value={enteredEmail}
+            value={emailData.email}
             onChange={emailChangeHandler}
             onBlur={validateEmailHandler}
           />
         </ControlWrapper>
-        <ControlWrapper className={passwordIsValid === false ? "invalid" : ""}>
+        <ControlWrapper
+          className={passwordData.passwordIsValid === false ? "invalid" : ""}
+        >
           <StyledLable htmlFor="password">Password</StyledLable>
           <StyledInput
             type="password"
             id="password"
-            value={enteredPassword}
+            value={passwordData.password}
             onChange={passwordChangeHandler}
             onBlur={validatePasswordHandler}
           />
